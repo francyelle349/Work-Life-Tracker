@@ -39,7 +39,7 @@ class _TrackerPageState extends State<TrackerPage> {
       backgroundColor: Colors.grey[100], // Light background for better readability
       appBar: AppBar(
         title: const Text("Time Tracker"),
-        backgroundColor: Color.fromARGB(255,216, 170, 150),
+        backgroundColor: const Color.fromARGB(255,216, 170, 150),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -69,7 +69,7 @@ class _TrackerPageState extends State<TrackerPage> {
                       timerColor = Colors.black;
                       break;
                     case TimerStatus.running:
-                      timerColor = Color.fromARGB(255,199, 211, 191);
+                      timerColor = const Color.fromARGB(255,199, 211, 191);
                       break;
                     case TimerStatus.paused:
                       timerColor = Colors.grey;
@@ -127,39 +127,48 @@ class _TrackerPageState extends State<TrackerPage> {
                 children: [
                   _buildActionButton(
                     title: "Start",
-                    color: Color.fromARGB(255,255, 201, 181),
+                    color: const Color.fromARGB(255,255, 201, 181),
                     onPressed: () {
-                      _controller.start();
+                   setState(() {
+                      
                       final input = textEditingControllerTimer.text;
                       _controller = TimerController.seconds(int.parse(input) * 3600);
                       WorkerHours += int.parse(input);
+                        _controller.start();
+                   });
                     },
                   ),
                   _buildActionButton(
                     title: "Pause",
-                    color: Color.fromARGB(255,247, 177, 171),
+                    color: const Color.fromARGB(255,247, 177, 171),
                     onPressed: () {
-                      _controller.pause();
+                     setState(() {
+                        _controller.pause();
                       PauseNumber += 1;
+                     });
                     },
                   ),
                   _buildActionButton(
                     title: "Reset",
-                    color: Color.fromARGB(255,216, 170, 150),
+                    color: const Color.fromARGB(255,216, 170, 150),
                     onPressed: () {
-                      _controller.reset();
+                      setState(() {
+                        _controller.reset();
+                      });
                     },
                   ),
                   _buildActionButton(
                     title: "Restart",
-                    color: Color.fromARGB(255,199, 211, 191),
+                    color: const Color.fromARGB(255,199, 211, 191),
                     onPressed: () {
-                      _controller.restart();
+                     setState(() {
+                        _controller.restart();
+                     });
                     },
                   ),
                   _buildActionButton(
                     title: "Add Timer",
-                    color: Color.fromARGB(255, 128, 113, 130),
+                    color: const Color.fromARGB(255, 128, 113, 130),
                     onPressed: () {
                       setState(() {
                         _controller = TimerController.seconds(
