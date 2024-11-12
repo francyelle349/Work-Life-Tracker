@@ -15,6 +15,8 @@ class _TrackerPageState extends State<TrackerPage> {
   late TimerController _controller;
   TextEditingController textEditingControllerTimer = TextEditingController();
 
+  int _remainingTime = 0;
+
   @override
   void initState() {
     super.initState();
@@ -125,29 +127,47 @@ class _TrackerPageState extends State<TrackerPage> {
                 spacing: 20,
                 runSpacing: 20,
                 children: [
-                  _buildActionButton(
-                    title: "Start",
-                    color: const Color.fromARGB(255,255, 201, 181),
-                    onPressed: () {
-                   setState(() {
-                      
-                      final input = textEditingControllerTimer.text;
-                      _controller = TimerController.seconds(int.parse(input) * 3600);
-                      WorkerHours += int.parse(input);
-                        _controller.start();
-                   });
-                    },
-                  ),
-                  _buildActionButton(
-                    title: "Pause",
-                    color: const Color.fromARGB(255,247, 177, 171),
-                    onPressed: () {
-                     setState(() {
-                        _controller.pause();
-                      PauseNumber += 1;
-                     });
-                    },
-                  ),
+                // Variável para armazenar o tempo restante
+
+
+_buildActionButton(
+  title: "Start",
+  color: const Color.fromARGB(255, 255, 201, 181),
+  onPressed: () {
+    setState(() {
+      // Obtém o valor de entrada do usuário
+      final input = textEditingControllerTimer.text;
+
+      // Verifica se existe tempo restante para retomar de onde parou
+      if (_remainingTime > 0) {
+        // Retoma a partir do tempo restante
+        _controller = TimerController.seconds(_remainingTime);
+      } else {
+        // Inicia um novo timer se não houver tempo restante
+        _controller = TimerController.seconds(int.parse(input) * 3600);
+        WorkerHours += int.parse(input);
+      }
+
+      // Começa o timer
+      _controller.start();
+    });
+  },
+),
+_buildActionButton(
+  title: "Pause",
+  color: const Color.fromARGB(255, 247, 177, 171),
+  onPressed: () {
+    setState(() {
+      // Armazena o tempo restante antes de pausar
+      _remainingTime = _controller.value.remaining;
+      _controller.pause();
+
+      // Incrementa o contador de pausas
+      PauseNumber += 1;
+    });
+  },
+),
+
                   _buildActionButton(
                     title: "Reset",
                     color: const Color.fromARGB(255,216, 170, 150),
